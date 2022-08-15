@@ -2,7 +2,9 @@ package servers.handlers;
 
 import servers.MyServer;
 import servers.services.AuthenticationService;
+import servers.services.EmailService;
 
+import javax.mail.MessagingException;
 import java.io.*;
 import java.net.Socket;
 import java.util.Date;
@@ -28,10 +30,6 @@ public class ClientHandler {
     private DataInputStream in;
     private DataOutputStream out;
     private String username;
-    private static File file;
-    private static FileWriter fileWriter;
- //   private static FileReader fileReader;
-    private static BufferedInputStream inputStream;
     private final ChatHistoryHandler chatHandler;
 
 

@@ -16,12 +16,10 @@ public class MyServer {
     private final ServerSocket serverSocket;
     private final AuthenticationService authenticationService;
     private final ArrayList<ClientHandler> clients;
-   // private final ChatHistoryHandler handler;
 
     public MyServer(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         authenticationService = new DBAuthenticationServiceImpl();
-      //  handler = new ChatHistoryHandler();
         clients = new ArrayList<>();
     }
 
@@ -124,7 +122,4 @@ public class MyServer {
         }
     }
 
-/*    public ChatHistoryHandler getHandler() {
-        return handler;
-    }*/
 }
