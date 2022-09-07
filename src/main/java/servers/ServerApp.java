@@ -1,5 +1,8 @@
 package servers;
 
+import servers.services.EmailService;
+
+import javax.mail.MessagingException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
@@ -10,7 +13,7 @@ public class ServerApp {
 
     private static String configsFile = "src/main/resources/configs/server-configs.properties";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, MessagingException {
 
         Properties properties = new Properties();
 
