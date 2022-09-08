@@ -8,6 +8,7 @@ import javax.mail.MessagingException;
 import java.io.*;
 import java.net.Socket;
 import java.util.Date;
+import java.util.logging.Logger;
 
 public class ClientHandler {
 
@@ -31,13 +32,13 @@ public class ClientHandler {
     private DataOutputStream out;
     private String username;
     private final ChatHistoryHandler chatHandler;
+    private static Logger logger = Logger.getLogger("clientHandlerLogger");
 
 
     public ClientHandler(MyServer myServer, Socket socket) throws IOException {
         chatHandler = new ChatHistoryHandler();
         this.myServer = myServer;
         clientSocket = socket;
-
     }
 
     public void handle() throws IOException {
@@ -70,8 +71,8 @@ public class ClientHandler {
                 }
             }
             else {
+                logger.warning("Неверная команда аутентификации");
                 out.writeUTF(AUTHERR_CMD_PREFIX + " Неверная команда аутентификации");
-                System.out.println(" Неверная команда аутентификации");
             }
 
         }
@@ -82,7 +83,7 @@ public class ClientHandler {
         String[] messageParts = message.split("\\s+");
         if (messageParts.length != 3){
             out.writeUTF(AUTHERR_CMD_PREFIX + " Неверная команда аутентификации");
-            System.out.println(" Неверная команда аутентификации");
+            logger.warning(" Неверная команда аутентификации");
             return false;
         }
 
@@ -100,7 +101,7 @@ public class ClientHandler {
             }
             out.writeUTF(AUTHOK_CMD_PREFIX+ " " + username+" " + sendChatHistory());
             myServer.subscribe(this);
-            System.out.println("Пользователь "+ username +" подключился к чату");
+            logger.info("Пользователь "+ username +" подключился к чату");
             return true;
         } else {
             out.writeUTF(AUTHERR_CMD_PREFIX + " Неверная комбинация логина и пароля");
@@ -111,7 +112,7 @@ public class ClientHandler {
     private void readMessage() throws IOException {
         while (true){
             String message = in.readUTF();
-            System.out.println("message " + username + ": " + message);
+            logger.info("message " + username + ": " + message);
             String typeMessage = message.split("\\s+")[0];
             switch (typeMessage) {
                 case STOP_SERVER_CMD_PREFIX: myServer.stop();
@@ -133,7 +134,7 @@ public class ClientHandler {
     public void closeConnection() throws IOException {
         myServer.unSubscribe(this);
         clientSocket.close();
-        System.out.println(username + " disconnected");
+        logger.info(username + " disconnected");
     }
 
     public void sendMessage(String sender, String message) throws IOException {

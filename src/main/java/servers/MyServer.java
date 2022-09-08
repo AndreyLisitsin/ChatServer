@@ -10,12 +10,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class MyServer {
 
     private final ServerSocket serverSocket;
     private final AuthenticationService authenticationService;
     private final ArrayList<ClientHandler> clients;
+    private static Logger logger = Logger.getLogger("serverLogger");
 
     public MyServer(int port) throws IOException {
         serverSocket = new ServerSocket(port);
@@ -24,8 +26,7 @@ public class MyServer {
     }
 
     public void start() {
-        System.out.println("Server start");
-        System.out.println("-----------------------");
+        logger.info("Server start \n------------------- \n");
         try {
             while (true) {
                 waitAndProcessNewClientConnetion();
@@ -72,8 +73,7 @@ public class MyServer {
     }
 
     public void stop() {
-        System.out.println("-----------------");
-        System.out.println("Завершение работы");
+        logger.info("-------------------------\nЗавершение работы\n");
         System.exit(0);
     }
 
@@ -88,7 +88,7 @@ public class MyServer {
 
     public void broadcastPrivateMessage(ClientHandler recipient, String message) throws IOException {
         String recipientName = message.split("\\s+")[1];
-        System.out.println("Отправка сообещения пользователю: " + recipientName);
+        logger.info("Отправка сообещения пользователю: " + recipientName);
         for (ClientHandler client : clients){
             if (client.getUsername().equals(recipientName)){
                 client.sendPrivateMessage(recipient.getUsername(), message);
@@ -109,7 +109,7 @@ public class MyServer {
         for (int i = 0; i < clients.size(); i++){
             b.append(clients.get(i).getUsername()).append(" ");
         }
-        System.out.println(b);
+       // System.out.println(b);
         return b.toString();
 
     }
