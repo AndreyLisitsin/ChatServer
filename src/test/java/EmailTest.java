@@ -1,7 +1,5 @@
 import org.junit.jupiter.api.Test;
 import servers.services.EmailService;
-
-import javax.mail.MessagingException;
 import java.io.IOException;
 
 
@@ -10,10 +8,15 @@ public class EmailTest {
     private final EmailService emailService;
 
     public EmailTest() throws IOException {
-        emailService = new EmailService();
+        emailService = EmailService.createInstance();
     }
     @Test
-    public void sendTestMessage() throws MessagingException {
-        emailService.sendEmailMessage();
+    public void sendMessageException(){
+        emailService.sendEmailMessage("sdferghrthhvbnvb");
+    }
+
+    @Test
+    public void sendMessage(){
+        emailService.sendEmailMessage("lisitsin.ak@yandex.ru");
     }
 }
